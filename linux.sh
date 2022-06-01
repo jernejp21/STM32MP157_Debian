@@ -38,7 +38,6 @@ tar -xvf debian-11.3-minimal-armhf-2022-04-15.tar.xz
 sudo mkdir rootfs
 sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C rootfs/
 
-
 export kernel_version="5.15.32-armv7-lpae-x23"
 #user@localhost:~$
 sudo mkdir -p rootfs/boot/extlinux/
@@ -57,7 +56,7 @@ sudo tar -xvf ./kernelbuildscripts/deploy/${kernel_version}-modules.tar.gz -C ro
 sudo sh -c "echo '/dev/mmcblk0p4  /  auto  errors=remount-ro  0  1' >> rootfs/etc/fstab"
 
 sudo mkdir tmp_rootfs
-dd if=/dev/zero of=rootfs.ext4 bs=4k count=250000
+dd if=/dev/zero of=rootfs.ext4 bs=1M count=2000
 sudo mkfs.ext4 rootfs.ext4
 
 sudo mount -o loop rootfs.ext4 tmp_rootfs
@@ -78,3 +77,4 @@ mkdir root
 mkdir tmp
 ./genimage-15/genimage --inputpath . --outputpath . --config genimage.cfg --rootpath root --tmppath tmp
 
+sudo rm -rf root rootfs tmp tmp_rootfs
