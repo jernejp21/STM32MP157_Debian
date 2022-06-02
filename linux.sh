@@ -69,7 +69,7 @@ wget https://github.com/pengutronix/genimage/releases/download/v15/genimage-15.t
 tar -xvf genimage-15.tar.xz
 #git clone https://github.com/pengutronix/genimage.git
 cd genimage-15
-#unset CC
+unset CC
 ./configure
 make all
 cd ..
