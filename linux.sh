@@ -25,7 +25,7 @@ cd ..
 #Linux Kernel
 git clone https://github.com/RobertCNelson/armv7-lpae-multiplatform ./kernelbuildscripts
 cd kernelbuildscripts/
-git checkout origin/v5.15.x -b tmp
+git checkout origin/v5.16.x -b tmp
 #Build the kernel
 ./build_kernel.sh
 cd ..
@@ -38,7 +38,7 @@ tar -xvf debian-11.3-minimal-armhf-2022-04-15.tar.xz
 sudo mkdir rootfs
 sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C rootfs/
 
-export kernel_version="5.15.32-armv7-lpae-x23"
+export kernel_version="5.16.20-armv7-lpae-x20"
 #user@localhost:~$
 sudo mkdir -p rootfs/boot/extlinux/
 sudo sh -c "echo 'label Linux ${kernel_version}' > rootfs/boot/extlinux/extlinux.conf"
