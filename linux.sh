@@ -1,9 +1,15 @@
 #!/bin/bash
 
+#Linux Kernel
+git clone https://github.com/RobertCNelson/armv7-lpae-multiplatform ./kernelbuildscripts
+cd kernelbuildscripts/
+git checkout origin/v5.16.x -b tmp
+#Build the kernel
+./build_kernel.sh
+export kernel_version=$(cat "kernel_version")
 #ARM Cross Compiler: GCC
-wget -c https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.1.0/x86_64-gcc-11.1.0-nolibc-arm-linux-gnueabi.tar.xz
-tar -xvf x86_64-gcc-11.1.0-nolibc-arm-linux-gnueabi.tar.xz
-export CC=`pwd`/gcc-11.1.0-nolibc/arm-linux-gnueabi/bin/arm-linux-gnueabi-
+export CC=`pwd`/dl/gcc-11.3.0-nolibc/arm-linux-gnueabi/bin/arm-linux-gnueabi-
+cd ..
 
 #Bootloader: U-Boot
 git clone -b v2022.04-rc4 https://github.com/u-boot/u-boot --depth=1
@@ -22,14 +28,6 @@ make CROSS_COMPILE=${CC} realclean
 make CROSS_COMPILE=${CC} PLAT=stm32mp1 ARCH=aarch32 ARM_ARCH_MAJOR=7 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dk1.dtb STM32MP_SDMMC=1
 cd ..
 
-#Linux Kernel
-git clone https://github.com/RobertCNelson/armv7-lpae-multiplatform ./kernelbuildscripts
-cd kernelbuildscripts/
-git checkout origin/v5.16.x -b tmp
-#Build the kernel
-./build_kernel.sh
-cd ..
-
 #Root File System - Debian 11
 wget -c https://rcn-ee.com/rootfs/eewiki/minfs/debian-11.3-minimal-armhf-2022-04-15.tar.xz
 tar -xvf debian-11.3-minimal-armhf-2022-04-15.tar.xz
@@ -38,7 +36,6 @@ tar -xvf debian-11.3-minimal-armhf-2022-04-15.tar.xz
 sudo mkdir rootfs
 sudo tar xfvp ./debian-*-*-armhf-*/armhf-rootfs-*.tar -C rootfs/
 
-export kernel_version="5.16.20-armv7-lpae-x20"
 #user@localhost:~$
 sudo mkdir -p rootfs/boot/extlinux/
 sudo sh -c "echo 'label Linux ${kernel_version}' > rootfs/boot/extlinux/extlinux.conf"
